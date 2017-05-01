@@ -1,9 +1,9 @@
 package hashmap_test
 
 import (
-	"testing"
 	"github.com/DusanKasan/hashmap"
 	"math/rand"
+	"testing"
 	"time"
 )
 
@@ -13,7 +13,7 @@ func TestHashmap(t *testing.T) {
 	//hash function that causes collisions
 	hashFunc := func(i interface{}) int64 {
 		v := i.(int64)
-		if v != 0 && v % 5 == 0 {
+		if v != 0 && v%5 == 0 {
 			return v - 1
 		}
 
@@ -28,12 +28,12 @@ func TestHashmap(t *testing.T) {
 
 			m := hashmap.New(hashFunc)
 
-			for key, value := range (input) {
+			for key, value := range input {
 				t.Logf("Inserting key: %v", key)
 				m.Insert(key, value)
 			}
 
-			for key, value := range (input) {
+			for key, value := range input {
 				v, found := m.Get(key)
 				if !found {
 					t.Errorf("Key not found: %v", key)
@@ -51,7 +51,7 @@ func TestHashmap(t *testing.T) {
 			removedKeys := []int64{}
 			for len(keys) > 0 {
 				preservedKeys := []int64{}
-				for i, k := range(keys) {
+				for i, k := range keys {
 
 					if i == 0 {
 						t.Logf("Removing key: %v", k)
@@ -68,7 +68,7 @@ func TestHashmap(t *testing.T) {
 				}
 				keys = preservedKeys
 
-				for _, k := range(keys) {
+				for _, k := range keys {
 					v, found := m.Get(k)
 					if !found {
 						t.Errorf("Key %v not found!", k)
@@ -77,7 +77,7 @@ func TestHashmap(t *testing.T) {
 					}
 				}
 
-				for _, k := range(removedKeys) {
+				for _, k := range removedKeys {
 					_, found := m.Get(k)
 					if found {
 						t.Errorf("Key %v found when it shouldn't have been!", k)
@@ -89,12 +89,12 @@ func TestHashmap(t *testing.T) {
 }
 
 //generate a map with randomized keys and values
-func generateInputPool(size int) (map[int64]int64) {
+func generateInputPool(size int) map[int64]int64 {
 	r := map[int64]int64{}
 	values := rand.Perm(size * 4)
 
-	for index, key := range (rand.Perm(size * 4)) {
-		if index % 4 == 0 {
+	for index, key := range rand.Perm(size * 4) {
+		if index%4 == 0 {
 			r[int64(key)] = int64(values[index])
 		}
 	}
@@ -105,13 +105,13 @@ func generateInputPool(size int) (map[int64]int64) {
 func getShuffledKeys(input map[int64]int64) []int64 {
 	keys := []int64{}
 
-	for key, _ := range(input) {
+	for key, _ := range input {
 		keys = append(keys, key)
 	}
 
 	order := rand.Perm(len(keys))
 	result := []int64{}
-	for _, k := range(order) {
+	for _, k := range order {
 		result = append(result, keys[k])
 	}
 

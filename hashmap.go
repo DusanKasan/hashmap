@@ -1,34 +1,37 @@
 package hashmap
 
 type color bool
+
 const black color = false
 const red color = true
 
 type matchPosition int8
+
 const greater matchPosition = 1
 const same matchPosition = 0
 const lower matchPosition = -1
 
 type rbTreeNode struct {
-	color      color
+	color color
 
-	keyHash    int64
-	key        interface{}
-	value      interface{}
+	keyHash int64
+	key     interface{}
+	value   interface{}
 
-	parent     *rbTreeNode
+	parent *rbTreeNode
 
-	left       *rbTreeNode
-	right      *rbTreeNode
+	left  *rbTreeNode
+	right *rbTreeNode
 
 	collisions map[interface{}]interface{}
 }
 
 type rbTree struct {
-	root       *rbTreeNode
-	hashFunc   func(interface{}) int64
+	root     *rbTreeNode
+	hashFunc func(interface{}) int64
 }
 
+// Create new hash map with supplied hashing function
 func New(hashFunc func(i interface{}) int64) *rbTree {
 	return &rbTree{hashFunc: hashFunc}
 }
@@ -38,18 +41,17 @@ func (rb *rbTree) Insert(key, value interface{}) {
 
 	child := &rbTreeNode{
 		keyHash: keyHash,
-		key: key,
-		value: value,
-		left: &rbTreeNode{},
-		right: &rbTreeNode{},
-		color: red,
+		key:     key,
+		value:   value,
+		left:    &rbTreeNode{},
+		right:   &rbTreeNode{},
+		color:   red,
 	}
 	child.collisions = map[interface{}]interface{}{}
 
 	if rb.root != nil {
 		//find insertion parent and position where we should place child
 		parent, position := findInsertionParent(rb.root, keyHash)
-
 
 		//insert the child node
 		switch position {
@@ -79,7 +81,7 @@ func (rb *rbTree) Insert(key, value interface{}) {
 	for {
 		if child.parent == nil {
 			rb.root = child
-			break;
+			break
 		}
 
 		child = child.parent
@@ -171,7 +173,7 @@ func (rb *rbTree) Remove(key interface{}) (found bool) {
 
 	if len(node.collisions) > 0 {
 		if key == node.key {
-			for k, v := range (node.collisions) {
+			for k, v := range node.collisions {
 				node.key = k
 				node.value = v
 				break
@@ -226,7 +228,7 @@ func (rb *rbTree) Remove(key interface{}) (found bool) {
 				rb.root = nil
 			}
 
-			break;
+			break
 		}
 
 		replacementNodeChild = replacementNodeChild.parent
@@ -236,7 +238,7 @@ func (rb *rbTree) Remove(key interface{}) (found bool) {
 }
 
 func isLeaf(node *rbTreeNode) bool {
-	return node.left == nil && node.right == nil && node.color == black;
+	return node.left == nil && node.right == nil && node.color == black
 }
 
 //if node is the new root, finish
@@ -264,24 +266,23 @@ func deleteCase2(node *rbTreeNode) {
 	deleteCase3(node)
 }
 
-
 func deleteCase3(node *rbTreeNode) {
 	sibling := getSibling(node)
 	if node.parent.color == black && sibling.color == black && sibling.left.color == black && sibling.right.color == black {
-		sibling.color = red;
-		deleteCase1(node.parent);
+		sibling.color = red
+		deleteCase1(node.parent)
 	} else {
-		deleteCase4(node);
+		deleteCase4(node)
 	}
 }
 
 func deleteCase4(node *rbTreeNode) {
 	sibling := getSibling(node)
 	if node.parent.color == red && sibling.color == black && sibling.left.color == black && sibling.right.color == black {
-		sibling.color = red;
-		node.parent.color = black;
+		sibling.color = red
+		node.parent.color = black
 	} else {
-		deleteCase5(node);
+		deleteCase5(node)
 	}
 }
 
@@ -305,15 +306,15 @@ func deleteCase5(node *rbTreeNode) {
 func deleteCase6(node *rbTreeNode) {
 	sibling := getSibling(node)
 
-	sibling.color = node.parent.color;
-	node.parent.color = black;
+	sibling.color = node.parent.color
+	node.parent.color = black
 
-	if (node == node.parent.left) {
-		sibling.right.color = black;
-		rotateLeft(node.parent);
+	if node == node.parent.left {
+		sibling.right.color = black
+		rotateLeft(node.parent)
 	} else {
-		sibling.left.color = black;
-		rotateRight(node.parent);
+		sibling.left.color = black
+		rotateRight(node.parent)
 	}
 }
 
@@ -411,18 +412,19 @@ func findInsertionParent(n *rbTreeNode, keyHash int64) (*rbTreeNode, matchPositi
 	if keyHash > n.keyHash {
 		if isLeaf(n.right) {
 			return n, greater
-		} else {
-			return findInsertionParent(n.right, keyHash)
 		}
+
+		return findInsertionParent(n.right, keyHash)
+
 	} else if keyHash < n.keyHash {
 		if isLeaf(n.left) {
 			return n, lower
-		} else {
-			return findInsertionParent(n.left, keyHash)
 		}
-	} else {
-		return n, same
+
+		return findInsertionParent(n.left, keyHash)
 	}
+
+	return n, same
 }
 
 func getGrandparent(n *rbTreeNode) (g *rbTreeNode) {
@@ -439,9 +441,9 @@ func getUncle(n *rbTreeNode) (u *rbTreeNode) {
 		return
 	} else if n.parent == g.left {
 		return g.right
-	} else {
-		return g.left
 	}
+
+	return g.left
 }
 
 func getSibling(n *rbTreeNode) (u *rbTreeNode) {
@@ -451,8 +453,7 @@ func getSibling(n *rbTreeNode) (u *rbTreeNode) {
 
 	if n.parent.left == n {
 		return n.parent.right
-	} else {
-		return n.parent.left
 	}
-}
 
+	return n.parent.left
+}

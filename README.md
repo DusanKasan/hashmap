@@ -1,5 +1,7 @@
 # Hashmap
 
+[![Build Status](https://circleci.com/gh/DusanKasan/hashmap.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/DusanKasan/hashmap) [![Coverage Status](https://coveralls.io/repos/github/DusanKasan/hashmap/badge.svg?branch=master)](https://coveralls.io/github/DusanKasan/hashmap?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/DusanKasan/hashmap)](https://goreportcard.com/report/github.com/DusanKasan/hashmap)
+
 A [Red-Black Tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) [Hash Map](https://en.wikipedia.org/wiki/Hash_table) implementation in Golang that uses user-supplied hashing algorithms.
 
 ## Usage
@@ -60,7 +62,7 @@ As this hash map supports keys and values of any type (by type hinting interface
 
 Direct support for code generation by this package is still considered but not yet implemented.
 
-##TODO
+## TODO
 
 - implement as thread safe
 - threadsafety: don't lock the whole tree but separate nodes?
