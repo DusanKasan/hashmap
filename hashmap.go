@@ -31,7 +31,7 @@ type rbTree struct {
 	hashFunc func(interface{}) int64
 }
 
-// Create new hash map with supplied hashing function
+// New creates a new hash map with supplied hashing function
 func New(hashFunc func(i interface{}) int64) *rbTree {
 	return &rbTree{hashFunc: hashFunc}
 }

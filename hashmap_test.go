@@ -105,7 +105,7 @@ func generateInputPool(size int) map[int64]int64 {
 func getShuffledKeys(input map[int64]int64) []int64 {
 	keys := []int64{}
 
-	for key, _ := range input {
+	for key := range input {
 		keys = append(keys, key)
 	}
 
